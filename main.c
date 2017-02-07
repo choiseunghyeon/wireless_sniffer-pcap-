@@ -8,8 +8,18 @@
 #include <netinet/if_ether.h> /* includes net/ethernet.h */
 #include "packetinfo.h"
 #include "wirelessframe.h"
+#include <stdint.h>
+
+
 
 void packet_handler(u_char *param, const struct pcap_pkthdr *header, const u_char *pkt_data);
+
+void voice(){
+    if(1){
+        system("play /home/choi/Desktop/jarvis_voice/welcome.wav");
+        /* voice : http://superuser.com/questions/276596/play-mp3-or-wav-file-via-linux-command-line */
+    }
+}
 
 int main()
 {
@@ -101,7 +111,19 @@ char errbuf[PCAP_ERRBUF_SIZE];
           printf(" src mac : %02x:%02x:%02x:%02x:%02x:%02x",
                  pprobe_r->sour_addr[0], pprobe_r->sour_addr[1],pprobe_r->sour_addr[2],
                  pprobe_r->sour_addr[3], pprobe_r->sour_addr[4], pprobe_r->sour_addr[5]);
+
           printf("\n");
+          if(pprobe_r->sour_addr[0] == 0xf4)
+              voice();
           }
     }
+
 }
+
+ /*
+남은 기능
+1. 사용자를 정확하게 판별하여 voice()실행시키게 하기
+2. voice()는 한번만 실행시키기
+3. sleep()을 이용하여 몇분씩 끊어서 패킷 받기
+4. 데이터를 처리해줄 db 또는 하둡 쓰기
+*/
