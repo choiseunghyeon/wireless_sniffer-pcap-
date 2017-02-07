@@ -24,7 +24,7 @@ __attribute__((__packed__));
 
 struct probe_request{
     uint8_t Subtype;
-    uint8_t Control_Field[2];
+    uint8_t Control_Field;
     uint16_t dummy;
     uint8_t Dest_addr[6]; // Receiver == Dest
     uint8_t sour_addr[6]; // Transmitter == source
