@@ -126,4 +126,5 @@ char errbuf[PCAP_ERRBUF_SIZE];
 2. voice()는 한번만 실행시키기
 3. sleep()을 이용하여 몇분씩 끊어서 패킷 받기
 4. 데이터를 처리해줄 db 또는 하둡 쓰기
+5. 알아서 모니터모드로 해주는 기능 넣기(system ./chgmonitor 이름)
 */
