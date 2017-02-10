@@ -3,26 +3,24 @@
 
 
 #include <stdint.h>
-#include <netinet/in.h>
+#define MAC_LEN 6
 
-struct Radiotap{
+struct Radiotap{ //18byte
     uint8_t Header_revision;
     uint8_t Header_pad;
-    uint8_t Header_length[2];
-    uint8_t Present_flags[8];
+    uint16_t Header_length;
+    uint32_t Present_flags;
     uint8_t flags;
     uint8_t Data_Rate;
-    uint8_t Channel_frequency[2];
-    uint8_t Channel_flags[2];
+    uint16_t Channel_frequency;
+    uint16_t Channel_flags;
     uint8_t SSI_Signal;
-    uint8_t dummy;
-    uint8_t RX_flags[2];
-    uint8_t SSI2_Siganl;
     uint8_t Antenna;
+    uint8_t RX_flags[2];
 }
 __attribute__((__packed__));
 
-struct probe_request{
+struct probe_request{ // 24byte
     uint8_t Subtype;
     uint8_t Control_Field;
     uint16_t dummy;
@@ -37,5 +35,16 @@ struct Wlan_frame{
     uint8_t dont_care[90];
 };
 
+
+/*      if(1){
+         for(int i=0;i<sizeof(struct probe_request);i++){
+             printf("%02x %02x %04x dst: %02x %02x %02x %02x %02x %02x src: %02x %02x %02x %02x %02x %02x\n"
+                    ,pprobe_r->Subtype,pprobe_r->Control_Field,pprobe_r->dummy,
+                    pprobe_r->Dest_addr[0],pprobe_r->Dest_addr[1],pprobe_r->Dest_addr[2],
+                    pprobe_r->Dest_addr[3],pprobe_r->Dest_addr[4],pprobe_r->Dest_addr[5],
+                    pprobe_r->sour_addr[0],pprobe_r->sour_addr[1],pprobe_r->sour_addr[2],
+                    pprobe_r->sour_addr[3],pprobe_r->sour_addr[4],pprobe_r->sour_addr[5]);
+         }
+     }*/
 #endif // WIRELESSFRAME_H
 

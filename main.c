@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "pcap.h" /* if this gives you an error try pcap/pcap.h */
 #include <errno.h>
 #include <sys/socket.h>
@@ -8,15 +9,18 @@
 #include <netinet/if_ether.h> /* includes net/ethernet.h */
 #include "packetinfo.h"
 #include "wirelessframe.h"
+#include "function.h"
 #include <stdint.h>
 
+
+uint8_t *user_mac[]={"0xf4","0x42","0x8f","0x2c","0x70","0x53"};
 
 
 void packet_handler(u_char *param, const struct pcap_pkthdr *header, const u_char *pkt_data);
 
 void voice(){
     if(1){
-        system("play /home/choi/Desktop/jarvis_voice/welcome.wav");
+        system("play /home/choi/jarvis_voice/welcome.wav");
         /* voice : http://superuser.com/questions/276596/play-mp3-or-wav-file-via-linux-command-line */
     }
 }
@@ -102,19 +106,22 @@ char errbuf[PCAP_ERRBUF_SIZE];
      pkt_data+=sizeof(struct probe_request);
      pwframe=(struct pwframe *)pkt_data;
 
+
      if(prp->Header_revision == 0x00 && prp->Header_pad == 0x00){
           if(pprobe_r->Subtype==0x40){
           printf("find probe\n");
+          printf("length: %d",prp->Header_length);
           printf(" dst mac: %02x:%02x:%02x:%02x:%02x:%02x",
                  pprobe_r->Dest_addr[0], pprobe_r->Dest_addr[1],pprobe_r->Dest_addr[2],
                  pprobe_r->Dest_addr[3], pprobe_r->Dest_addr[4], pprobe_r->Dest_addr[5]);
-          printf(" src mac : %02x:%02x:%02x:%02x:%02x:%02x",
+          printf(" src mac : %02x:%02x:%02x:%02x:%02x:%02x\n",
                  pprobe_r->sour_addr[0], pprobe_r->sour_addr[1],pprobe_r->sour_addr[2],
                  pprobe_r->sour_addr[3], pprobe_r->sour_addr[4], pprobe_r->sour_addr[5]);
 
-          printf("\n");
-          if(pprobe_r->sour_addr[0] == 0xf4)
-              voice();
+         printf("\n");
+          if(chgstr(pprobe_r->sour_addr,user_mac[0],MAC_LEN))
+              printf("good");
+              //voice();
           }
     }
 

@@ -7,5 +7,6 @@ SOURCES += main.c
 
 HEADERS += \
     packetinfo.h \
-    wirelessframe.h
+    wirelessframe.h \
+    function.h
 
