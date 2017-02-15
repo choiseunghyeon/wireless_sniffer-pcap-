@@ -12,7 +12,8 @@
 #include "function.h"
 #include <stdint.h>
 
-
+int user_voice_flag[USER_NUMBER]; // user_mac과 같은 배열 번호에 return값을 반환
+uint8_t user_mac[USER_NUMBER][MAC_LEN]={0xf4,0x42,0x8f,0x2c,0x70,0x53};
 
 void packet_handler(u_char *param, const struct pcap_pkthdr *header, const u_char *pkt_data);
 
@@ -144,5 +145,5 @@ char errbuf[PCAP_ERRBUF_SIZE];
 1. 핸드폰의 화면을 켰을 때만 probe나 wireless 패킷을 보냄
 즉 화면을 안키면 패킷의 흐름이 없어서 출결에 어려움이 존재함
 2. QoS의 경우 키지  않아도 패킷을 보냄
-
+3. 절전 모드에서는 QoS 패킷을 안보내나봄
 */
