@@ -5,18 +5,21 @@
 #include <stdint.h>
 #define MAC_LEN 6
 
-struct Radiotap{ //18byte
+struct Radiotap{ //18byte or 24byte 무선랜카드 또는 wifi에 따라 raditap의 크기가 달라짐
     uint8_t Header_revision;
     uint8_t Header_pad;
     uint16_t Header_length;
-    uint32_t Present_flags;
+    uint64_t Present_flags;
     uint8_t flags;
     uint8_t Data_Rate;
     uint16_t Channel_frequency;
     uint16_t Channel_flags;
     uint8_t SSI_Signal;
-    uint8_t Antenna;
+    uint8_t dummy;
     uint8_t RX_flags[2];
+    uint8_t SSI_Signal2;
+    uint8_t Antenna;
+
 }
 __attribute__((__packed__));
 
