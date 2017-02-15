@@ -37,8 +37,11 @@ void reset_voice_flag(){
 
 void chkenv(pcap_if_t *d){
     int fd,height=3;
-    char interface=calloc(100,sizeof(char));
-    strcpy(interface,d->name);
+    char interface=(char**)calloc(2,sizeof(char*));
+    interface[0]=(char*)calloc(100,sizeof(char));
+    interface[1]=(char*)calloc(100,sizeof(char));
+    strcpy(interface[1],'./set.sh ');
+    sprintf(interface[0],"%s%s",interface[1],d->name);
     fd = open("./set.sh", O_WRONLY | O_CREAT | O_EXCL, S_IRWXU ); //http://amy82.tistory.com/248
     printf("%d",fd);
     if(!(fd==-1)){
@@ -47,7 +50,7 @@ void chkenv(pcap_if_t *d){
         for(int i=0;i<height;i++)
             script[i]=(char*)malloc(sizeof(char)*1024);        // script+i == script[i]
 
-        strcpy(script[1],"#!/bin/bash\ninterface=");
+        strcpy(script[1],"#!/bin/bash\ninterface=$1");
         strcpy(script[2],"\na=`iwconfig $interface | grep Mode | awk 'BEGIN {FS=\":\"}{print $2}' | sudo awk '{print $1==\"Managed\"}'`\n\nif [ $a == '1' ];"
                 "\nthen\n\tifconfig $interface down\n\tiwconfig $interface mode monitor\n\tifconfig $interface up\nfi");
         sprintf(script[0],"%s%s%s",script[1],d->name,script[2]);
@@ -57,6 +60,10 @@ void chkenv(pcap_if_t *d){
         free(script);
     }
     close(fd);
-    system("./set.sh");
+    system(interface[0]);
+    for(int i=0;i<2;i++){
+        free(interface[i]);
+    }
+    free(interface);
 }
 // interface shell에서 변수로 받김
