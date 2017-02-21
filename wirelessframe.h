@@ -23,6 +23,24 @@ struct Radiotap{ //18byte or 24byte 무선랜카드 또는 wifi에 따라 radita
 }
 __attribute__((__packed__));
 
+struct QoS_Radiotap{ //27byte
+    uint8_t Header_revision;
+    uint8_t Header_pad;
+    uint16_t Header_length;
+    uint64_t Present_flags;
+    uint8_t flags;
+    uint8_t dummy;
+    uint16_t Channel_frequency;
+    uint16_t Channel_flags;
+    uint8_t SSI_Signal;
+    uint8_t dummy2;
+    uint8_t RX_flags[2];
+    uint8_t MCS_info[3];
+    uint8_t SSI_Signal2;
+    uint8_t Antenna;
+}
+__attribute__((__packed__));
+
 struct probe_request{ // 24byte
     uint8_t Subtype;
     uint8_t Control_Field;
@@ -31,6 +49,21 @@ struct probe_request{ // 24byte
     uint8_t sour_addr[6]; // Transmitter == source
     uint8_t bssid[6];
     uint8_t num[2]; // Fragment, Sequence
+}
+__attribute__((__packed__));
+
+
+struct QoS{
+    uint8_t Subtype;
+    uint8_t flags;
+    uint16_t dummy;
+    uint8_t Dest_addr[6];
+    uint8_t bssid[6];
+    uint8_t sour_addr[6];
+    uint16_t dummy2;
+    uint16_t control;
+    uint64_t CCMP_param;
+
 }
 __attribute__((__packed__));
 
