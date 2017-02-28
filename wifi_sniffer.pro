@@ -12,10 +12,12 @@ LIBS += -lpcap
 SOURCES += main.c \
     function.c \
     db.c \
-    json_parse.c
+    json_parse.c \
+    jsmn/jsmn.c
 
 HEADERS += \
     packetinfo.h \
     wirelessframe.h \
-    function.h
+    function.h \
+    jsmn/jsmn.h
 

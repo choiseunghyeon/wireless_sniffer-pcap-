@@ -68,6 +68,7 @@ char errbuf[PCAP_ERRBUF_SIZE];
     for(d=alldevs, i=0; i< inum-1 ;d=d->next, i++);
 
     chkenv(d); //check monitor mode. I will add some function.
+    db();
 
     /* Open the device */
     if (!(adhandle=pcap_open_live(d->name,65536,1,1,errbuf)))
@@ -161,7 +162,7 @@ char errbuf[PCAP_ERRBUF_SIZE];
 
 참고사항
 1. 지정된 mac은 고정 되있다고 가정
-2. 커널 프로그래밍을 통해서 하드웨어가 보내는 정보를 파싱해서 써보기(가능한지 알아보기)
+2. 커널 프로그래밍을 통해서 하드웨어가 보내는 정보를 파싱해서 써보기(가능)
 3. iwconfig가 syscall을 이용해서 정보를 파싱해온다면 iwconfig를 통하지 않고 내 프로그램에서 직접  파싱해올 수도 있을 것.. 이러면 속도가 빨라지니까 한번 도전하자
 4. QoS 데이타와 probe는 wifi에 연결되어있을 떄만 보내는 건가? lte에  있어도 무선랜으로 보내는 데이터가 있나?
 5. 주로 wifi기기에서 연결된 station에게 보내는 듯
@@ -172,6 +173,10 @@ char errbuf[PCAP_ERRBUF_SIZE];
 2. QoS의 경우 키지  않아도 패킷을 보냄
 3. 절전 모드에서는 QoS 패킷을 안보내나봄
 4. QoS Null data로 보내기도 함
+
+현재상황
+1. parse 성공
+2. return u를 어떻게 처리할지 고민중
 
 의존성
 1. pcap
