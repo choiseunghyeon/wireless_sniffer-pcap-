@@ -18,10 +18,9 @@ static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
     return -1;
 }
 
-user json_parse(const char *JSON_STRING){
+int json_parse(const char *JSON_STRING,user *user){
     int i;
     int r;
-    user u; // 초기화.
     jsmn_parser p;
     jsmntok_t t[128]; /* We expect no more than 128 tokens */
     char tmp[2], *end; // for mac
@@ -31,8 +30,7 @@ user json_parse(const char *JSON_STRING){
     r = jsmn_parse(&p, JSON_STRING, strlen(JSON_STRING), t, sizeof(t)/sizeof(t[0]));
     if (r < 0) {
         printf("Failed to parse JSON: %d\n", r);
-        u.stat=-1;
-        return us;
+        return 1;
     }
 
     /* Loop over all keys of the root object */
@@ -42,13 +40,13 @@ user json_parse(const char *JSON_STRING){
         //printf("%d.Unexpected key: %.*s\n",i, t[i].end-t[i].start,
                 //JSON_STRING + t[i].start); 값이 덮어씌워지는데 왜지?
         if(i==7){
-            strncpy(u.name,JSON_STRING + t[i].start,t[i].end-t[i].start);
+            strncpy(user->name,JSON_STRING + t[i].start,t[i].end-t[i].start);
         } else if(i>=9 && i<=14){
             strncpy(tmp,JSON_STRING + t[i].start,t[i].end-t[i].start);
-            u.mac[cnt]=strtol(tmp,&end,16);
+            user->mac[cnt]=strtol(tmp,&end,16);
             cnt++;
         }
     }
-    return us;
+    return 1;
 }
 
