@@ -128,14 +128,15 @@ char errbuf[PCAP_ERRBUF_SIZE];
  }
 
  /*
-남은 기능
-1. 사용자를 정확하게 판별하여 voice()실행시키게 하기 _ solve
-2. voice()는 한번만 실행시키기_시간을 정해놓고 특정 시간마다 flag를 초기화_solve
-3. sleep()을 이용하여 몇분씩 끊어서 패킷 받기
-4. 데이터를 처리해줄 db 또는 하둡 쓰기_solve
-5. 처음에 monitor 모드 및 voice 파일 설정 및 확인해주는 기능 만들기 -> voice 설정 및 코드 재구성 하기
-6. 처음에만 설정하는 것 만들기 ex) mac의 갯수_mac을 수집하여 list를 만들고 list에 존재하는 mac의 번호를 치면 그 mac을 추가
-7. QAudiooutput qt 에서 음성 출력 가능_only c++
+
+프로그램 흐름
+1. 사용자의 입력을 받음
+2. 랜카드 선택
+3. 랜카드의 monitor mode 여부 검사 및 monitor mode로 바꾸기
+4. db에 저장된 맥을 찾는 것을 진행
+5. 찾으면 voice 실행(1회)
+6. db에 찾은 시각과 함께 사용자의 이름을 함께 저장
+
 
 참고사항
 1. 지정된 mac은 고정 되있다고 가정
@@ -146,12 +147,17 @@ char errbuf[PCAP_ERRBUF_SIZE];
 6. db and monitor mode on
 
 문제점
-1. 핸드폰의 화면을 켰을 때만 probe나 wireless 패킷을 보냄
-즉 화면을 안키면 패킷의 흐름이 없어서 출결에 어려움이 존재함
-2. QoS의 경우 키지  않아도 패킷을 보냄
-3. 절전 모드에서는 QoS 패킷을 안보내나봄
-4. QoS Null data로 보내기도 함
+1. 절전 모드에서는 QoS 패킷을 안보내나봄
+2. QoS Null data로 보내기도 함(환경에 따라 다름)
 
+남은 기능
+1. 사용자를 정확하게 판별하여 voice()실행시키게 하기 _ solve
+2. voice()는 한번만 실행시키기_시간을 정해놓고 특정 시간마다 flag를 초기화_solve
+3. sleep()을 이용하여 몇분씩 끊어서 패킷 받기
+4. 데이터를 처리해줄 db 또는 하둡 쓰기_solve
+5. 처음에 monitor 모드 및 voice 파일 설정 및 확인해주는 기능 만들기 -> voice 설정 및 코드 재구성 하기
+6. 처음에만 설정하는 것 만들기 ex) mac의 갯수_mac을 수집하여 list를 만들고 list에 존재하는 mac의 번호를 치면 그 mac을 추가
+7. QAudiooutput qt 에서 음성 출력 가능_only c++
 
 의존성
 1. pcap
@@ -159,36 +165,4 @@ char errbuf[PCAP_ERRBUF_SIZE];
 3. jsmn
 4. mplayer - voice : http://superuser.com/questions/276596/play-mp3-or-wav-file-via-linux-command-line
 
-디비
-1. db attendance
-*/
 
- /* struct Radiotap *prp;
-  struct probe_request *pprobe_r;
-  struct Wlan_frame *pwframe;
-
-  prp=(struct prp *)pkt_data;.
-  pkt_data+=sizeof(struct Radiotap);
-  pprobe_r=(struct probe_request *)pkt_data;
-  pkt_data+=sizeof(struct probe_request);
-  pwframe=(struct pwframe *)pkt_data;
-
-  if(prp->Header_revision == 0x00 && prp->Header_pad == 0x00){
-       if(pprobe_r->Subtype==0x40){
-       printf("find probe\n");
-       printf("length: %d",prp->Header_length);
-       printf(" dst mac: %02x:%02x:%02x:%02x:%02x:%02x",
-              pprobe_r->Dest_addr[0], pprobe_r->Dest_addr[1],pprobe_r->Dest_addr[2],
-              pprobe_r->Dest_addr[3], pprobe_r->Dest_addr[4], pprobe_r->Dest_addr[5]);
-       printf(" src mac : %02x:%02x:%02x:%02x:%02x:%02x\n",
-              pprobe_r->sour_addr[0], pprobe_r->sour_addr[1],pprobe_r->sour_addr[2],
-              pprobe_r->sour_addr[3], pprobe_r->sour_addr[4], pprobe_r->sour_addr[5]);
-
-      printf("\n");
-           for(int num=0;num<USER_NUMBER;num++){
-               if(chkstr(pprobe_r->sour_addr,&user_mac[num]))
-                 voice();
-           }
-       }
-  }
-*/
